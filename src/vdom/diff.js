@@ -190,6 +190,7 @@ function innerDiffNode(dom, vchildren, context, mountAll, isHydrating) {
 	}
 
 	if (vlen!==0) {
+		let offset = 0;
 		for (let i=0; i<vlen; i++) {
 			vchild = vchildren[i];
 			child = null;
@@ -219,13 +220,17 @@ function innerDiffNode(dom, vchildren, context, mountAll, isHydrating) {
 			// morph the matched/found/created DOM child to match vchild (deep)
 			child = idiff(child, vchild, context, mountAll);
 
-			f = originalChildren[i];
+			f = originalChildren[i + offset];
 			if (child && child!==dom && child!==f) {
 				if (f==null) {
 					dom.appendChild(child);
 				}
 				else if (child===f.nextSibling) {
-					removeNode(f);
+					if (f._component) {
+						offset ++;
+					} else {
+						removeNode(f);
+					}
 				}
 				else {
 					dom.insertBefore(child, f);
