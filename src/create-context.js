@@ -5,14 +5,15 @@ export function createContext(value) {
     var context = {
         default: value
     }
-	function Provider(p, c) {
-		Component.call(this, p, c);
+    function Provider(p, c) {
+        Component.call(this, p, c);
         this.c = [];
         this.p = this.p.bind(this);
         this.u = this.u.bind(this);
-	}
-	extendComponent(Provider, {
-		p(subscriber) {
+    }
+    Provider.displayName = "Context.Provider"
+    extendComponent(Provider, {
+        p(subscriber) {
             this.c.push(subscriber);
             return this.props.value;
         },
@@ -43,9 +44,9 @@ export function createContext(value) {
         render() {
             return this.props.children && this.props.children[0];
         }
-	});
-	function Consumer(p, c) {
-		Component.call(this, p, c);
+    });
+    function Consumer(p, c) {
+        Component.call(this, p, c);
         this.updateContext = this.updateContext.bind(this);
         if (c.providers) {
             for (var i = c.providers.length - 1; i >= 0; i--) {
@@ -60,9 +61,10 @@ export function createContext(value) {
                 }
             }
         }
-	}
-	extendComponent(Consumer, {
-		updateContext(val) {
+    }
+    Consumer.displayName = "Context.Consumer"
+    extendComponent(Consumer, {
+        updateContext(val) {
             this.setState({ value: val });
         },
         componentWillUnmount() {
@@ -73,8 +75,8 @@ export function createContext(value) {
         render() {
             return this.props.children && this.props.children[0](this.state.value);
         }
-	});
+    });
     context.Provider = Provider
     context.Consumer = Consumer
-	return context;
+    return context;
 }

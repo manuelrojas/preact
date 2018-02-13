@@ -1,8 +1,9 @@
 /node_modules
 /npm-debug.log
 .DS_Store
-/dist
+/dist/*
 /_dev
+!/dist/preact.dev.js
 /coverage
 package-lock.json
 
