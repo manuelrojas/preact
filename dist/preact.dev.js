@@ -135,7 +135,7 @@
      */
     var defer = typeof Promise == 'function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
 
-    function extendComponent(obj, prop) {
+    function extendComponent(obj, Component, prop) {
       function __() {
         this.constructor = obj;
       }
@@ -630,9 +630,9 @@
 
         if (Ctor.prototype && Ctor.prototype.render) {
             inst = new Ctor(props, context);
-            Component$1.call(inst, props, context);
+            Component.call(inst, props, context);
         } else {
-            inst = new Component$1(props, context);
+            inst = new Component(props, context);
             inst.constructor = Ctor;
             inst.render = doRender;
         }
@@ -921,7 +921,7 @@
      *		}
      *	}
      */
-    function Component$1(props, context) {
+    function Component(props, context) {
         this._dirty = true;
 
         /** @public
@@ -940,7 +940,7 @@
         this.state = this.state || {};
     }
 
-    extend(Component$1.prototype, {
+    extend(Component.prototype, {
 
         /** Returns a `boolean` indicating if the component should re-render when receiving the given `props` and `state`.
       *	@param {object} nextProps
@@ -1008,12 +1008,13 @@
             default: value
         };
         function Provider(p, c) {
-            Component$1.call(this, p, c);
+            Component.call(this, p, c);
             this.c = [];
             this.p = this.p.bind(this);
             this.u = this.u.bind(this);
         }
-        extendComponent(Provider, {
+        Provider.displayName = "Context.Provider";
+        extendComponent(Provider, Component, {
             p: function p(subscriber) {
                 this.c.push(subscriber);
                 return this.props.value;
@@ -1049,7 +1050,7 @@
             }
         });
         function Consumer(p, c) {
-            Component$1.call(this, p, c);
+            Component.call(this, p, c);
             this.updateContext = this.updateContext.bind(this);
             if (c.providers) {
                 for (var i = c.providers.length - 1; i >= 0; i--) {
@@ -1065,7 +1066,8 @@
                 }
             }
         }
-        extendComponent(Consumer, {
+        Consumer.displayName = "Context.Consumer";
+        extendComponent(Consumer, Component, {
             updateContext: function updateContext(val) {
                 this.setState({ value: val });
             },
@@ -1088,7 +1090,7 @@
         createElement: h,
         createContext: createContext,
         cloneElement: cloneElement,
-        Component: Component$1,
+        Component: Component,
         render: render,
         rerender: rerender,
         options: options

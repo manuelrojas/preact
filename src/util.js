@@ -1,3 +1,5 @@
+
+
 /**
  *  Copy all properties from `props` onto `obj`.
  *  @param {Object} obj		Object onto which properties should be copied.
@@ -20,7 +22,7 @@ export function extend(obj, props) {
 export const defer = typeof Promise=='function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
 
 
-export function extendComponent(obj, prop) {
+export function extendComponent(obj, Component, prop) {
 	function __() { this.constructor = obj; }
 	__.prototype = Component.prototype
 	obj.prototype = new __();

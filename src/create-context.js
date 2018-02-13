@@ -12,7 +12,7 @@ export function createContext(value) {
         this.u = this.u.bind(this);
     }
     Provider.displayName = "Context.Provider"
-    extendComponent(Provider, {
+    extendComponent(Provider, Component, {
         p(subscriber) {
             this.c.push(subscriber);
             return this.props.value;
@@ -63,7 +63,7 @@ export function createContext(value) {
         }
     }
     Consumer.displayName = "Context.Consumer"
-    extendComponent(Consumer, {
+    extendComponent(Consumer, Component, {
         updateContext(val) {
             this.setState({ value: val });
         },
