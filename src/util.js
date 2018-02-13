@@ -18,3 +18,11 @@ export function extend(obj, props) {
  * @param {Function} callback
  */
 export const defer = typeof Promise=='function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
+
+
+export function extendComponent(obj, prop) {
+	function __() { this.constructor = obj; }
+	__.prototype = Component.prototype
+	obj.prototype = new __();
+	extend(obj.prototype, prop)
+}

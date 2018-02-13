@@ -4,10 +4,12 @@ import { Component } from './component';
 import { render } from './render';
 import { rerender } from './render-queue';
 import options from './options';
+import { createContext } from "./create-context";
 
 export default {
 	h,
 	createElement,
+	createContext,
 	cloneElement,
 	Component,
 	render,
@@ -18,6 +20,7 @@ export default {
 export {
 	h,
 	createElement,
+	createContext,
 	cloneElement,
 	Component,
 	render,

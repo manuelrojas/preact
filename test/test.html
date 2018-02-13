@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <script src="../dist/preact.js"></script>
+    <!-- <script src="../node_modules/preact/dist/preact.dev.js"></script> -->
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+    </div>
+    <script>
+        'use strict';
+        var h = preact.h;
+        var render = preact.render;
+        var Component = preact.Component;
+        const ThemeContext = preact.createContext({
+            background: 'red',
+            color: 'white'
+        });
+        window.ThemeContext = ThemeContext;
+        const ContextMap = {
+            1: { background: 'red', color: 'white' },
+            2: { background: 'green', color: 'white' }
+        }
+        class App extends Component {
+            constructor() {
+                super()
+                this.state = {
+                    map: 1
+                }
+            }
+            select() {
+                this.setState({
+                    map: this.state.map === 1 ? 2: 1
+                })
+            }
+            render () {
+                return (
+                    h("div", null,
+                        h(ThemeContext.Provider, {value: ContextMap[this.state.map === 1 ? 2: 1]},
+                            h(Header, {map: this.state.map})
+                        ),
+                        h(ThemeContext.Provider, {value: ContextMap[this.state.map]},
+                            h(Header, {map: this.state.map === 1 ? 2: 1})
+                        ),
+                        h("button", {onClick: () => this.select()}, "测试")
+                    )
+                    
+                );
+            }
+        }
+        class Header extends Component {
+            // shouldComponentUpdate() {
+            //     return false
+            // }
+            render () {
+                return h(Title, this.props, "Hello React Context API")
+            }
+        }
+        class Title extends Component {
+            render () {
+                return h(ThemeContext.Consumer, null,
+                    context => h(this.props.map === 1 ? "h1": "h2", {style: {background: context.background, color: context.color}},
+                        this.props.children
+                    )
+                )
+                // h(ThemeContext.Consumer, null,
+                //     context => h("h2", {style: {background: context.background, color: context.color}},
+                //         this.props.children
+                //     )
+                // ),
+            }
+        }
+        render(
+            h(App), 
+            document.getElementById('app')
+        );
+
+    </script>
+    <script src="../devtools.js"></script>
+    <!-- <script src="../node_modules/preact/devtools.js"></script> -->
+</body>
+</html>
